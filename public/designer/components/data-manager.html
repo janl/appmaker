@@ -105,6 +105,7 @@
     </div>
   </template>
   <script>
+    var hoodie = new Hoodie('http://127.0.0.1:6121/_api/');
     window.CeciData = window.CeciData || {};
     window.CeciData.collections = window.CeciData.collections || [
       {
@@ -121,13 +122,25 @@
         ]
       }
     ];
+    var hoodieType = 'collections';
+    var hoodieId = 'collections';
 
     Polymer('data-manager', {
       currentCollection: undefined,
       currentCollectionIndex: 0,
       ready: function () {
+        console.log('in ready');
         this.collections = window.CeciData.collections;
-        this.currentCollection = this.collections[this.currentCollectionIndex];
+        hoodie.store.find(hoodieType, hoodieId)
+          .done(function (collections) {
+            console.log('we found an existing collection');
+            // we found an existing collection
+            this.collections = collections;
+            this.currentCollection = this.collections[this.currentCollectionIndex];
+          });
+        });
+
+        console.log('out ready');
       },
       addCollection: function () {
         this.collections.push({
@@ -173,6 +186,15 @@
       },
       removeDataRow: function (event, detail, sender) {
         this.currentCollection.data.splice(parseInt(sender.getAttribute('data-index')), 1);
+      },
+      commit: function () {
+        hoodie.store.save(hoodieType, hoodieId, {collections: this.collections})
+          .done(function () {
+            console.log('collections saved');
+          })
+          .fail(function (err) {
+            console.log('storing collections failed');
+          });
       }
     });
   </script>

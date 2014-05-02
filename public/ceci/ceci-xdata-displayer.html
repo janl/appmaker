@@ -43,6 +43,8 @@
     // no idea why this has to be wrapped in a timeout
     // just... yeah.
     setTimeout(function () {
+      console.log('in data displayer');
+      console.log(window.CeciData);
       Polymer("ceci-data-displayer", {
         currentCollection: window.CeciData.collections[0] || {},
         ready: function() {
