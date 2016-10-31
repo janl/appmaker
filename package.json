@@ -19,7 +19,7 @@
     "node-uuid": "~1.4.1"
   },
   "engines": {
-    "node": ">0.8.x",
+    "node": ">= 4",
     "npm": ">1.2.x"
   },
   "devDependencies": {
